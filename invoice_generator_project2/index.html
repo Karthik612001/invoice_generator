@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Invoice</title>
+  <!-- External CSS file link cheyyunnu -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="invoice-wrapper">
+    <div class="top-bar"></div>
+    <div class="content-area">
+      
+      <!-- Header -->
+      <div class="brand-section">
+        <div>
+          <h1>INVOICE</h1>
+          <p>CloudOps Infrastructure Pvt Ltd</p>
+        </div>
+        <div class="text-right">
+          <span class="badge-paid">Paid</span>
+          <p class="invoice-num" id="invNum">INV-9821</p>
+        </div>
+      </div>
+
+      <!-- Details Box -->
+      <div class="grid-info">
+        <div>
+          <div class="info-label">Billed To</div>
+          <div class="info-value">
+            <strong>Karthik Tech Labs</strong><br>
+            DevOps & Cloud Division<br>
+            karthik@example.com
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="info-label">Invoice Details</div>
+          <div class="info-value">
+            <strong>Date:</strong> <span id="billDate"></span><br>
+            <strong>Payment Mode:</strong> UPI / Net Banking<br>
+            <strong>Status:</strong> Completed
+          </div>
+        </div>
+      </div>
+
+      <!-- Line Items Table -->
+      <table>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th class="text-center">Qty</th>
+            <th class="text-right">Unit Price</th>
+            <th class="text-right">Total</th>
+          </tr>
+        </thead>
+        <tbody id="billItems">
+          <!-- JavaScript vazhi render aakum -->
+        </tbody>
+      </table>
+
+      <!-- Summary -->
+      <div class="summary-wrap">
+        <div class="summary-table">
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span id="subTotal">₹0.00</span>
+          </div>
+          <div class="summary-row">
+            <span>GST (18%):</span>
+            <span id="taxAmount">₹0.00</span>
+          </div>
+          <div class="summary-row grand-total">
+            <span>Amount Due:</span>
+            <span id="grandTotal">₹0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="footer-actions">
+        <div class="notes">
+          Thank you for your business! For queries, contact support@cloudops.com.
+        </div>
+        <button class="btn-print" onclick="window.print()">Print / Download PDF</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const services = [
+      { name: "CI/CD Pipeline Setup (GitHub Actions)", qty: 1, rate: 6500 },
+      { name: "Docker Containerization & Multi-stage Build", qty: 2, rate: 3000 },
+      { name: "Linux Server Security & Nginx Configuration", qty: 1, rate: 4500 }
+    ];
+
+    const tbody = document.getElementById("billItems");
+    let subtotal = 0;
+
+    services.forEach(item => {
+      const lineTotal = item.qty * item.rate;
+      subtotal += lineTotal;
+
+      const row = `
+        <tr>
+          <td><strong>${item.name}</strong></td>
+          <td class="text-center">${item.qty}</td>
+          <td class="text-right">₹${item.rate.toLocaleString('en-IN')}</td>
+          <td class="text-right">₹${lineTotal.toLocaleString('en-IN')}</td>
+        </tr>
+      `;
+      tbody.innerHTML += row;
+    });
+
+    const gst = subtotal * 0.18;
+    const finalAmount = subtotal + gst;
+
+    document.getElementById("subTotal").innerText = `₹${subtotal.toLocaleString('en-IN')}`;
+    document.getElementById("taxAmount").innerText = `₹${gst.toLocaleString('en-IN')}`;
+    document.getElementById("grandTotal").innerText = `₹${finalAmount.toLocaleString('en-IN')}`;
+
+    const today = new Date().toLocaleDateString('en-IN', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+    document.getElementById("billDate").innerText = today;
+  </script>
+
+</body>
+</html>
